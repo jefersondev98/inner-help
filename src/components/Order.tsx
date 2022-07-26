@@ -16,7 +16,7 @@ export function Order({ data, ...rest}: Props) {
 
   const { colors } = useTheme()
 
-  const statusColor = data.status === 'open' ? colors.secondary[700] : colors.green[300]
+  const statusColor = data.status === 'open' ? colors.secondary[700] : colors.blue[300]
 
   return (
     <Pressable {...rest}>
@@ -46,8 +46,8 @@ export function Order({ data, ...rest}: Props) {
         <Circle bg='gray.500' h={12} w={12} mr={5}>
           {
             data.status === 'open'
-              ? <CircleWavyCheck size={24} color={statusColor} />
-              : <Hourglass size={24} color={statusColor} />
+              ? <Hourglass size={24} color={statusColor} />
+              : <CircleWavyCheck size={24} color={statusColor} />
           }
         </Circle>
         

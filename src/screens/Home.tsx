@@ -65,10 +65,10 @@ export function Home() {
       })
 
       return subscriber
-  }, [])
+  }, [statusSelected])
 
   return (
-    <VStack flex={1} pb={6} bg="gray.700">
+    <VStack flex={1} pb={6} bg="gray.700"> 
       <HStack
         w="full"
         justifyContent="space-between"
@@ -82,7 +82,7 @@ export function Home() {
       <Logo />
 
       <IconButton 
-        icon={<SignOut size={26} color={colors.gray[300]} />}  
+        icon={<SignOut size={26} color={colors.primary[700]} />}  
         onPress={handleLogout}
       />
 
