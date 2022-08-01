@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "rockethelp",
-    "slug": "rockethelp",
+    "name": "innerhelp",
+    "displayName": "Inner Help",
+    "slug": "innerhelp",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
@@ -10,11 +11,11 @@
       "@react-native-firebase/app"
     ],
     "android": {
-      "package": "com.rockethelp",
+      "package": "com.innerhelp",
       "googleServicesFile": "./google-services.json"
     },
     "ios": {
-      "package": "com.rockethelp",
+      "package": "com.innerhelp",
       "googleServicesFile": "./GoogleService-Info.plist"
     }
   }

@@ -13,11 +13,11 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.rockethelp</string>
+	<string>com.innerhelp</string>
 	<key>PROJECT_ID</key>
-	<string>rockethelp-4f022</string>
+	<string>innerhelp-4f022</string>
 	<key>STORAGE_BUCKET</key>
-	<string>rockethelp-4f022.appspot.com</string>
+	<string>innerhelp-4f022.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>

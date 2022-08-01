@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "156859309460",
-    "project_id": "rockethelp-4f022",
-    "storage_bucket": "rockethelp-4f022.appspot.com"
+    "project_id": "innerhelp-4f022",
+    "storage_bucket": "innerhelp-4f022.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:156859309460:android:b1d92c890c820f5c4b0381",
         "android_client_info": {
-          "package_name": "com.rockethelp"
+          "package_name": "com.innerhelp"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "156859309460-ki2544l3ic521uepogun04pt0rpios52.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.rockethelp"
+                "bundle_id": "com.innerhelp"
               }
             }
           ]
