@@ -20,7 +20,7 @@ export function Home() {
   const [isLoaging, setIsLoading] = useState(true)
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open')
 
-  const [orders, setOrders] = useState<OrderProps[]>([])
+  const [ticket, setTicket] = useState<OrderProps[]>([])
 
   const navigation = useNavigation()
   const { colors } = useTheme()
@@ -29,7 +29,7 @@ export function Home() {
     navigation.navigate('new')
   }
 
-  function handleOpenDetails(orderId: string){
+  function handleOpenDetailsTicket(orderId: string){
     navigation.navigate('details', { orderId })
   }
 
@@ -46,7 +46,7 @@ export function Home() {
     setIsLoading(true)
 
     const subscriber = firestore()
-      .collection('orders')
+      .collection('ticket')
       .where('status', '==', statusSelected)
       .onSnapshot(snapshot => {
         const data = snapshot.docs.map(doc => {
@@ -60,7 +60,7 @@ export function Home() {
             when: dateFormat(created_at)
           }
         })
-        setOrders(data)
+        setTicket(data)
         setIsLoading(false)
       })
 
@@ -91,10 +91,10 @@ export function Home() {
       <VStack flex={1} px={6}>
         <HStack w='full' mt={8} mb={4} justifyContent='space-between' alignItems='center'>
           <Heading color='gray.100'>
-            Solicitações
+            Tickets
           </Heading>
           <Text color='gray.200'>
-            {orders.length}
+            {ticket.length}
           </Text>
         </HStack>
 
@@ -117,24 +117,24 @@ export function Home() {
         {
           isLoaging ? <Loading /> :
           <FlatList 
-            data={orders}
+            data={ticket}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => <Order data={item} onPress={() => (handleOpenDetails(item.id))}/>}
+            renderItem={({ item }) => <Order data={item} onPress={() => (handleOpenDetailsTicket(item.id))}/>}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 100 }}
             ListEmptyComponent={() => (
               <Center>
                 <ChatTeardropText color={colors.gray[300]} size={40}/>
                 <Text color='gray.300' fontSize='xl' mt={6} textAlign='center'>
-                  Você ainda não possui {'\n'}
-                  solicitações {statusSelected === 'open' ? 'em aberto' : 'finalizadas'}
+                  Você não possui {'\n'}
+                  tickets {statusSelected === 'open' ? 'abertos' : 'finalizados'}
                 </Text>
               </Center>
             )}
           />
         }
 
-        <Button title='Nova solicitação' onPress={handleNewOrder} />
+        <Button title='Novo ticket' onPress={handleNewOrder} />
 
       </VStack>
     </VStack>

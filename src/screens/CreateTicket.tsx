@@ -7,14 +7,14 @@ import { Alert } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
 import { useNavigation } from '@react-navigation/native';
 
-export function Register() {
+export function CreateTicket() {
   const [isLoading, setIsLoading] = useState(false)
   const [patrimony, setPatrimony] = useState('')
   const [description, setDescription] = useState('')
 
   const navigation = useNavigation()
 
-  function handleNewOrder() {
+  function handleNewTicket() {
     if(!patrimony || !description) {
       return Alert.alert('Registrar', 'Preencha todos os campos.')
     }
@@ -22,7 +22,7 @@ export function Register() {
     setIsLoading(true)
 
     firestore()
-      .collection('orders')
+      .collection('ticket')
       .add({
         patrimony,
         description,
@@ -30,19 +30,19 @@ export function Register() {
         created_at: firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
-        Alert.alert('Solicitação', 'Solicitação registrada com sucesso.')
+        Alert.alert('Ticket', 'Ticket registrada com sucesso.')
         navigation.goBack()
       })
       .catch((error) => {
         console.log(error)
         setIsLoading(false)
-        return Alert.alert('Solicitação', 'Não foi possível registrar o pedido.')
+        return Alert.alert('Ticket', 'Não foi possível registrar o pedido.')
       })
   }
 
   return (
     <VStack flex={1} p={6} bg='gray.600'>
-      <Header title="Nova Solicitação"/>
+      <Header title="Novo Ticket"/>
 
       <Input 
         placeholder='Número do patrimônio'
@@ -60,10 +60,10 @@ export function Register() {
       />
 
       <Button 
-        title='Cadastrar'
+        title='Registrar'
         mt={5}
         isLoading={isLoading}
-        onPress={handleNewOrder}
+        onPress={handleNewTicket}
       />
     </VStack>
   );

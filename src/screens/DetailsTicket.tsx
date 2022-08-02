@@ -12,23 +12,23 @@ import { OrderFirestoreDTO } from '../DTOs/OrderFirestoreDTO';
 import { dateFormat } from '../utils/firestoreDateFormat';
 import { Loading } from '../components/Loading';
 import { CircleWavyCheck, Hourglass, DesktopTower, ClipboardText } from 'phosphor-react-native'
-import { CardDetails } from '../components/CardDetails'
+import { CardDetailsTicket } from '../components/CardDetailsTicket'
 
 
 type RouteParams = {
   orderId : string;
 }
 
-type OrderDetails = OrderProps & {
+type OrderDetailsTicket = OrderProps & {
   description: string;
   solution: string;
   closed: string;
 }
 
-export function Details() {
+export function DetailsTicket() {
   const [solution, setSolution] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const [order, setOrder] = useState<OrderDetails>({} as OrderDetails)
+  const [order, setOrder] = useState<OrderDetailsTicket>({} as OrderDetailsTicket)
 
   const navigation = useNavigation()
   const { colors } = useTheme();
@@ -38,11 +38,11 @@ export function Details() {
 
   function handleOrderClose() {
     if(!solution) {
-      return Alert.alert('Solicitação', 'Informa a solução para encerrar a solicitação.')
+      return Alert.alert('Ticket', 'Informa a solução para encerrar a ticket.')
     }
 
     firestore()
-      .collection('orders')
+      .collection('ticket')
       .doc(orderId)
       .update({
         status: 'closed',
@@ -50,18 +50,18 @@ export function Details() {
         closed_at: firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
-        Alert.alert('Solicitação', 'Solicitação encerrada.')
+        Alert.alert('Ticket', 'Ticket encerrada.')
         navigation.goBack()
       })
       .catch((error) => {
         console.log(error)
-        Alert.alert('Solicitação', 'Não foi possível encerrar a solicatação.')
+        Alert.alert('Ticket', 'Não foi possível encerrar a solicatação.')
       })
   }
 
   useEffect(() => {
     firestore()
-      .collection<OrderFirestoreDTO>('orders')
+      .collection<OrderFirestoreDTO>('ticket')
       .doc(orderId)
       .get()
       .then((doc) => {
@@ -90,7 +90,7 @@ export function Details() {
     <VStack flex={1} bg='gray.700'>
       
       <Box px={6} bg="gray.600">
-        <Header title='Solicitação'/>
+        <Header title='Ticket'/>
       </Box>
       
       
@@ -112,20 +112,20 @@ export function Details() {
       </HStack>
 
       <ScrollView mx={5} showsVerticalScrollIndicator={false}>
-          <CardDetails 
+          <CardDetailsTicket 
             title="equipamentos"
             description={`Patrimônio ${order.patrimony}`}
             icon={DesktopTower}
             footer={order.when}
           />
 
-          <CardDetails 
+          <CardDetailsTicket 
             title="descrição do problema"
             description={order.description}
             icon={ClipboardText}
           />
 
-          <CardDetails 
+          <CardDetailsTicket 
             title="solução"
             icon={CircleWavyCheck}
             description={order.solution}
@@ -141,13 +141,13 @@ export function Details() {
               /> 
             }
             
-          </CardDetails>
+          </CardDetailsTicket>
       </ScrollView>
 
       {
         order.status === 'open' && 
         <Button 
-          title="Encerrar solicitação"
+          title="Encerrar ticket"
           m={5}
           onPress={handleOrderClose}
         />

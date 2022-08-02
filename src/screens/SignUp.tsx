@@ -1,66 +1,58 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Alert, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native'
 import auth from '@react-native-firebase/auth'
-import { Box, VStack, Heading, Icon, useTheme, Pressable, Text } from 'native-base'
+import { VStack, Heading, Icon, useTheme, Box, Pressable, Text, IconButton, HStack } from 'native-base'
 import Logo from '../assets/logo_primary.svg'
-import { Envelope, Key } from 'phosphor-react-native'
-import { useNavigation } from '@react-navigation/native'
+import { CaretLeft, Envelope, Key } from 'phosphor-react-native'
 
 import { Input } from '../components/Input'
 import { Button } from '../components/Button'
+import { useNavigation } from '@react-navigation/native'
 
-export function SignIn() {
-
+export function SignUp() {
+  const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false); 
-  const navigation = useNavigation();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
 
   const { colors } = useTheme();
 
-  function handleSignIn() {
-    if(!email || !password) {
-      return Alert.alert('Entrar', 'Informe e-mail e senha.')
+  function handleSignUp() {
+    if(!email || !password || !passwordConfirm) {
+      return Alert.alert('Cadastrar', 'Informe todos os campos.')
+    }
+
+    if (password !== passwordConfirm) {
+      return Alert.alert('Cadastrar', 'As senhas devem ser iguais.')
     }
 
     setIsLoading(true)
 
     auth()
-      .signInWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(email, password)
       .catch((error) => {
         console.log(error)
         setIsLoading(false)
-        
-        if(error.code === 'auth/invalid-email') {
-          return Alert.alert('Entrar', 'E-mail inválido.')
-        }
 
-        if(error.code === 'auth/wrong-password') {
-          return Alert.alert('Entrar', 'E-mail ou senha inválida.')
-        }
-
-        if(error.code === 'auth/user-not-found') {
-          return Alert.alert('Entrar', 'E-mail ou senha inválida.')
-        }
-
-        return Alert.alert('Entrar', 'Não foi possível entrar.')
+        return Alert.alert('Cadastrar', 'Não foi possível realizar seu cadastro.')
       })
   }
 
-  function handleSignUp() {
-    navigation.navigate("signUp")
+  function handleSignIn() {
+    navigation.navigate("signIn")
   }
 
   return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Box flex={1} bg="gray.600">
-        <KeyboardAvoidingView behavior="position" enabled>
+      <Box flex={1} bg="gray.600">        
+        <KeyboardAvoidingView behavior="position" enabled>                  
           <VStack alignItems="center" px={8} pt={24}>
+
             <Logo />
 
             <Heading color="gray.100" fontSize="xl" mt={8} mb={6}>
-              Acesse sua conta
+              Realize seu cadastro
             </Heading>
 
             <Input 
@@ -70,29 +62,37 @@ export function SignIn() {
               onChangeText={setEmail}
             />
             <Input 
-              mb={8}
+              mb={4}
               placeholder="Senha" 
               InputLeftElement={<Icon as={<Key color={colors.gray[300]} />} ml={4} />}
               secureTextEntry
               onChangeText={setPassword}
             />
+            <Input 
+              mb={8}
+              placeholder="Confirme a senha" 
+              InputLeftElement={<Icon as={<Key color={colors.gray[300]} />} ml={4} />}
+              secureTextEntry
+              onChangeText={setPasswordConfirm}
+            />
 
             <Button 
-              title='Entrar' 
+              title='Cadastrar'
               mb={6}
               w="full" 
-              onPress={handleSignIn} 
+              onPress={handleSignUp} 
               isLoading={isLoading}
             />
+
             <Pressable mb={8}>
               <Text color="gray.100">
-                Ainda não tem uma conta?
-                <Text onPress={handleSignUp} color="primary.700"> Cadastre-se</Text>
+                Já possui uma conta?
+                <Text onPress={handleSignIn} color="primary.700"> Entrar</Text>
               </Text>
             </Pressable>
-          </VStack> 
+          </VStack>  
         </KeyboardAvoidingView>
       </Box>
-    </TouchableWithoutFeedback>       
+    </TouchableWithoutFeedback> 
   )
 }

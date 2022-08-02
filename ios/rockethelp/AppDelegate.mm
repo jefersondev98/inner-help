@@ -84,15 +84,15 @@
 }
 
 // Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+- (void)application:(UIApplication *)application didCreateTicketForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-  return [super application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+  return [super application:application didCreateTicketForRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
 // Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+- (void)application:(UIApplication *)application didFailToCreateTicketForRemoteNotificationsWithError:(NSError *)error
 {
-  return [super application:application didFailToRegisterForRemoteNotificationsWithError:error];
+  return [super application:application didFailToCreateTicketForRemoteNotificationsWithError:error];
 }
 
 // Explicitly define remote notification delegates to ensure compatibility with some third-party libraries
