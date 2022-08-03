@@ -11,7 +11,7 @@ import Logo from '../assets/logo_secondary.svg'
 
 import { Filter } from '../components/Filter'
 import { Button } from '../components/Button'
-import { Order, OrderProps } from '../components/Order'
+import { Order, TicketProps } from '../components/Ticket'
 import { Loading } from '../components/Loading';
 
 import { dateFormat } from '../utils/firestoreDateFormat'
@@ -20,17 +20,17 @@ export function Home() {
   const [isLoaging, setIsLoading] = useState(true)
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open')
 
-  const [ticket, setTicket] = useState<OrderProps[]>([])
+  const [ticket, setTicket] = useState<TicketProps[]>([])
 
   const navigation = useNavigation()
   const { colors } = useTheme()
 
   function handleNewOrder(){
-    navigation.navigate('new')
+    navigation.navigate('createTicket')
   }
 
-  function handleOpenDetailsTicket(orderId: string){
-    navigation.navigate('details', { orderId })
+  function handleOpenDetailsTicket(ticketId: string){
+    navigation.navigate('detailsTicket', { ticketId })
   }
 
   function handleLogout() {
@@ -46,15 +46,16 @@ export function Home() {
     setIsLoading(true)
 
     const subscriber = firestore()
-      .collection('ticket')
+      .collection('tickets')
       .where('status', '==', statusSelected)
       .onSnapshot(snapshot => {
         const data = snapshot.docs.map(doc => {
-          const { patrimony, description, status, created_at } = doc.data()
+          const { title, patrimony_number, description, status, created_at } = doc.data()
           
           return {
             id: doc.id,
-            patrimony: patrimony,
+            title,
+            patrimony_number: patrimony_number,
             description: description,
             status: status,
             when: dateFormat(created_at)
@@ -134,7 +135,7 @@ export function Home() {
           />
         }
 
-        <Button title='Novo ticket' onPress={handleNewOrder} />
+        <Button title='Novo Ticket' onPress={handleNewOrder} />
 
       </VStack>
     </VStack>

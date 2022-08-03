@@ -3,7 +3,8 @@ import { Alert, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 
 import auth from '@react-native-firebase/auth'
 import { VStack, Heading, Icon, useTheme, Box, Pressable, Text, IconButton, HStack } from 'native-base'
 import Logo from '../assets/logo_primary.svg'
-import { CaretLeft, Envelope, Key } from 'phosphor-react-native'
+import { CaretLeft, Envelope, IdentificationBadge, Key } from 'phosphor-react-native'
+import firestore from '@react-native-firebase/firestore'
 
 import { Input } from '../components/Input'
 import { Button } from '../components/Button'
@@ -12,6 +13,7 @@ import { useNavigation } from '@react-navigation/native'
 export function SignUp() {
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false); 
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -19,7 +21,7 @@ export function SignUp() {
   const { colors } = useTheme();
 
   function handleSignUp() {
-    if(!email || !password || !passwordConfirm) {
+    if(!name || !email || !password || !passwordConfirm) {
       return Alert.alert('Cadastrar', 'Informe todos os campos.')
     }
 
@@ -31,12 +33,29 @@ export function SignUp() {
 
     auth()
       .createUserWithEmailAndPassword(email, password)
-      .catch((error) => {
-        console.log(error)
+      .then(() => {
+        firestore()
+          .collection('users')
+          .add({
+            name,
+            email
+          })
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('Este e-mail já está em uso!');
+        }
+    
+        if (error.code === 'auth/invalid-email') {
+          console.log('E-mail inválido!');
+        }
+    
+        console.error(error);
+
         setIsLoading(false)
 
         return Alert.alert('Cadastrar', 'Não foi possível realizar seu cadastro.')
-      })
+      });    
   }
 
   function handleSignIn() {
@@ -55,6 +74,12 @@ export function SignUp() {
               Realize seu cadastro
             </Heading>
 
+            <Input 
+              placeholder="Nome" 
+              mb={4}
+              InputLeftElement={<Icon as={<IdentificationBadge color={colors.gray[300]} />} ml={4} />}
+              onChangeText={setName}
+            />
             <Input 
               placeholder="E-mail" 
               mb={4}

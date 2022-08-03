@@ -1,7 +1,8 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
 
-export type OrderFirestoreDTO = {
-    patrimony: string;
+export type TicketFirestoreDTO = {
+    title: string;
+    patrimony_number: number;
     description: string;
     status: 'open' | 'closed';
     solution?: string;

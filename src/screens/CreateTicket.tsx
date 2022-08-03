@@ -9,22 +9,24 @@ import { useNavigation } from '@react-navigation/native';
 
 export function CreateTicket() {
   const [isLoading, setIsLoading] = useState(false)
-  const [patrimony, setPatrimony] = useState('')
+  const [title, setTitle] = useState('')
+  const [patrimony_number, setPatrimony] = useState('')
   const [description, setDescription] = useState('')
 
   const navigation = useNavigation()
 
   function handleNewTicket() {
-    if(!patrimony || !description) {
+    if(!patrimony_number || !description) {
       return Alert.alert('Registrar', 'Preencha todos os campos.')
     }
 
     setIsLoading(true)
 
     firestore()
-      .collection('ticket')
+      .collection('tickets')
       .add({
-        patrimony,
+        title,
+        patrimony_number,
         description,
         status: 'open',
         created_at: firestore.FieldValue.serverTimestamp()
@@ -43,6 +45,12 @@ export function CreateTicket() {
   return (
     <VStack flex={1} p={6} bg='gray.600'>
       <Header title="Novo Ticket"/>
+
+      <Input 
+        placeholder='Título'
+        mt={4}
+        onChangeText={setTitle}
+      />
 
       <Input 
         placeholder='Número do patrimônio'

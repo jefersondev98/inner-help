@@ -4,8 +4,8 @@ export declare global {
       signIn: undefined;
       signUp: undefined;
       home: undefined;
-      new: undefined;      
-      details: { orderId: string };
+      createTicket: undefined;      
+      detailsTicket: { ticketId: string };
     }
   }
 }

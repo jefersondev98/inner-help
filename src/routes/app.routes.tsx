@@ -15,8 +15,8 @@ export function AppRoutes(){
       }}
     >
       <Screen name="home" component={Home} />
-      <Screen name="new" component={CreateTicket} />
-      <Screen name="details" component={DetailsTicket} />
+      <Screen name="createTicket" component={CreateTicket} />
+      <Screen name="detailsTicket" component={DetailsTicket} />
     </Navigator>
   )
 }

@@ -5,10 +5,10 @@ import { VStack, Text, HStack, useTheme, ScrollView, Box } from 'native-base';
 import { Header } from '../components/Header';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
-import { OrderProps } from '../components/Order';
+import { TicketProps } from '../components/Ticket';
 
 import firestore from '@react-native-firebase/firestore'
-import { OrderFirestoreDTO } from '../DTOs/OrderFirestoreDTO';
+import { TicketFirestoreDTO } from '../DTOs/TicketFirestoreDTO';
 import { dateFormat } from '../utils/firestoreDateFormat';
 import { Loading } from '../components/Loading';
 import { CircleWavyCheck, Hourglass, DesktopTower, ClipboardText } from 'phosphor-react-native'
@@ -16,10 +16,11 @@ import { CardDetailsTicket } from '../components/CardDetailsTicket'
 
 
 type RouteParams = {
-  orderId : string;
+  ticketId : string;
 }
 
-type OrderDetailsTicket = OrderProps & {
+type ticketDetailsTicket = TicketProps & {
+  title: string;
   description: string;
   solution: string;
   closed: string;
@@ -28,49 +29,50 @@ type OrderDetailsTicket = OrderProps & {
 export function DetailsTicket() {
   const [solution, setSolution] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const [order, setOrder] = useState<OrderDetailsTicket>({} as OrderDetailsTicket)
+  const [ticket, setTicket] = useState<ticketDetailsTicket>({} as ticketDetailsTicket)
 
   const navigation = useNavigation()
   const { colors } = useTheme();
   const route = useRoute()
-  const { orderId } = route.params as RouteParams
+  const { ticketId } = route.params as RouteParams
 
 
-  function handleOrderClose() {
+  function handleticketClose() {
     if(!solution) {
-      return Alert.alert('Ticket', 'Informa a solução para encerrar a ticket.')
+      return Alert.alert('Ticket', 'Informe a solução para encerrar o Ticket.')
     }
 
     firestore()
-      .collection('ticket')
-      .doc(orderId)
+      .collection('tickets')
+      .doc(ticketId)
       .update({
         status: 'closed',
         solution,
         closed_at: firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
-        Alert.alert('Ticket', 'Ticket encerrada.')
+        Alert.alert('Ticket', 'Ticket encerrado.')
         navigation.goBack()
       })
       .catch((error) => {
         console.log(error)
-        Alert.alert('Ticket', 'Não foi possível encerrar a solicatação.')
+        Alert.alert('Ticket', 'Não foi possível encerrar o Ticket.')
       })
   }
 
   useEffect(() => {
     firestore()
-      .collection<OrderFirestoreDTO>('ticket')
-      .doc(orderId)
+      .collection<TicketFirestoreDTO>('tickets')
+      .doc(ticketId)
       .get()
       .then((doc) => {
-        const { patrimony, description, status, created_at, closed_at, solution } = doc.data();
+        const { title, patrimony_number, description, status, created_at, closed_at, solution } = doc.data();
         const closed = closed_at ? dateFormat(closed_at) : null
 
-        setOrder({
+        setTicket({
           id: doc.id,
-          patrimony,
+          title,
+          patrimony_number,
           description,
           status,
           solution,
@@ -96,42 +98,42 @@ export function DetailsTicket() {
       
       <HStack bg="gray.500" justifyContent="center" p={4}>
         {
-          order.status === 'closed' 
+          ticket.status === 'closed' 
             ? <CircleWavyCheck size={22} color={colors.blue[300]} />
             : <Hourglass size={22} color={colors.secondary[700]} />
         }
 
         <Text
           fontSize="sm"
-          color={order.status ==='closed' ? colors.blue[300] : colors.secondary[700]}
+          color={ticket.status ==='closed' ? colors.blue[300] : colors.secondary[700]}
           ml={2}
           textTransform="uppercase"
         >
-          {order.status === 'closed' ? 'finalizado' : 'em andamento'}          
+          {ticket.status === 'closed' ? 'finalizado' : 'em andamento'}          
         </Text>        
       </HStack>
 
       <ScrollView mx={5} showsVerticalScrollIndicator={false}>
           <CardDetailsTicket 
             title="equipamentos"
-            description={`Patrimônio ${order.patrimony}`}
+            description={`Patrimônio ${ticket.patrimony_number}`}
             icon={DesktopTower}
-            footer={order.when}
+            footer={ticket.when}
           />
 
           <CardDetailsTicket 
             title="descrição do problema"
-            description={order.description}
+            description={ticket.description}
             icon={ClipboardText}
           />
 
           <CardDetailsTicket 
             title="solução"
             icon={CircleWavyCheck}
-            description={order.solution}
-            footer={order.closed && `Encerrado em ${order.closed}`}
+            description={ticket.solution}
+            footer={ticket.closed && `Encerrado em ${ticket.closed}`}
           >
-            { order.status === 'open' &&
+            { ticket.status === 'open' &&
               <Input 
               placeholder='Desrição da solução'
               onChangeText={setSolution}
@@ -145,11 +147,11 @@ export function DetailsTicket() {
       </ScrollView>
 
       {
-        order.status === 'open' && 
+        ticket.status === 'open' && 
         <Button 
-          title="Encerrar ticket"
+          title="Encerrar Ticket"
           m={5}
-          onPress={handleOrderClose}
+          onPress={handleticketClose}
         />
       }
     </VStack>
