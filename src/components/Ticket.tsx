@@ -3,6 +3,7 @@ import { ClockAfternoon, Hourglass, CircleWavyCheck } from 'phosphor-react-nativ
 
 export type TicketProps = {
   id: string;
+  title: string;
   patrimony_number: number;
   when: string;
   status: 'open' | 'closed';
@@ -12,7 +13,7 @@ type Props = IPressableProps & {
   data: TicketProps;
 }
 
-export function Order({ data, ...rest}: Props) {
+export function Ticket({ data, ...rest}: Props) {
 
   const { colors } = useTheme()
 
@@ -32,7 +33,7 @@ export function Order({ data, ...rest}: Props) {
 
         <VStack flex={1} my={5} ml={5}>
           <Text color='white' fontSize='md'>
-            Patrimônio {data.patrimony_number}
+            {data.title}
           </Text>
 
           <HStack alignItems='center'>

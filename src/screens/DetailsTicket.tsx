@@ -11,7 +11,7 @@ import firestore from '@react-native-firebase/firestore'
 import { TicketFirestoreDTO } from '../DTOs/TicketFirestoreDTO';
 import { dateFormat } from '../utils/firestoreDateFormat';
 import { Loading } from '../components/Loading';
-import { CircleWavyCheck, Hourglass, DesktopTower, ClipboardText } from 'phosphor-react-native'
+import { CircleWavyCheck, Hourglass, DesktopTower, ClipboardText, BookmarkSimple } from 'phosphor-react-native'
 import { CardDetailsTicket } from '../components/CardDetailsTicket'
 
 
@@ -19,8 +19,7 @@ type RouteParams = {
   ticketId : string;
 }
 
-type ticketDetailsTicket = TicketProps & {
-  title: string;
+type DetailsTicketProps = TicketProps & {
   description: string;
   solution: string;
   closed: string;
@@ -29,7 +28,7 @@ type ticketDetailsTicket = TicketProps & {
 export function DetailsTicket() {
   const [solution, setSolution] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const [ticket, setTicket] = useState<ticketDetailsTicket>({} as ticketDetailsTicket)
+  const [ticket, setTicket] = useState<DetailsTicketProps>({} as DetailsTicketProps)
 
   const navigation = useNavigation()
   const { colors } = useTheme();
@@ -115,11 +114,18 @@ export function DetailsTicket() {
 
       <ScrollView mx={5} showsVerticalScrollIndicator={false}>
           <CardDetailsTicket 
+            title="TÌTULO"
+            description={ticket.title}
+            icon={BookmarkSimple}
+            footer={ticket.when}
+          />
+
+          {/* <CardDetailsTicket 
             title="equipamentos"
             description={`Patrimônio ${ticket.patrimony_number}`}
             icon={DesktopTower}
             footer={ticket.when}
-          />
+          /> */}
 
           <CardDetailsTicket 
             title="descrição do problema"

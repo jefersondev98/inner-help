@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { HStack, IconButton, VStack, useTheme, Text, Heading, FlatList, Center } from 'native-base';
-import { SignOut } from 'phosphor-react-native'
-import { ChatTeardropText } from 'phosphor-react-native'
+import { HStack, IconButton, VStack, useTheme, Text, Heading, FlatList, Center, Box, Menu, Pressable } from 'native-base';
+import { SignOut, UserSquare } from 'phosphor-react-native'
+import { ChatTeardropText, UserCircle } from 'phosphor-react-native'
 import auth from '@react-native-firebase/auth'
 import { Alert } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
@@ -11,7 +11,7 @@ import Logo from '../assets/logo_secondary.svg'
 
 import { Filter } from '../components/Filter'
 import { Button } from '../components/Button'
-import { Order, TicketProps } from '../components/Ticket'
+import { Ticket, TicketProps } from '../components/Ticket'
 import { Loading } from '../components/Loading';
 
 import { dateFormat } from '../utils/firestoreDateFormat'
@@ -82,10 +82,41 @@ export function Home() {
 
       <Logo />
 
-      <IconButton 
+      {/* <IconButton 
         icon={<SignOut size={26} color={colors.primary[700]} />}  
         onPress={handleLogout}
-      />
+      /> */}
+
+      <Box alignItems="flex-start">
+        <Menu bg="gray.100" top={2} mr={6} w="100" trigger={triggerProps => {
+          return <Pressable {...triggerProps}>
+                  <UserCircle size={32} color={colors.primary[700]} />
+                </Pressable>;
+        }}>
+          <Menu.Item>
+            <HStack 
+              w="full"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <UserSquare size={26} color={colors.primary[700]} />
+              <Text>Perfil</Text>
+            </HStack>
+          </Menu.Item>
+          <Menu.Item
+            onPress={handleLogout}
+          >
+            <HStack 
+              w="full"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <SignOut size={26} color={colors.primary[700]} />
+              <Text>Sair</Text>
+            </HStack>            
+          </Menu.Item>
+        </Menu>
+      </Box>
 
       </HStack>
       
@@ -120,7 +151,7 @@ export function Home() {
           <FlatList 
             data={ticket}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => <Order data={item} onPress={() => (handleOpenDetailsTicket(item.id))}/>}
+            renderItem={({ item }) => <Ticket data={item} onPress={() => (handleOpenDetailsTicket(item.id))}/>}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 100 }}
             ListEmptyComponent={() => (

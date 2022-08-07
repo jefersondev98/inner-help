@@ -52,11 +52,13 @@ export function CreateTicket() {
         onChangeText={setTitle}
       />
 
-      <Input 
+      {/* <Input 
         placeholder='Número do patrimônio'
         mt={4}
-        onChangeText={setPatrimony}
-      />
+        onChangeText={(text) => setPatrimony(text.replace(/([.*+-?^=!:${}()|\[\]\/\\\,\s\g])/g, ""))}
+        value={patrimony_number}
+        keyboardType="numeric"
+      /> */}
 
       <Input
         placeholder='Descrição do problema'
